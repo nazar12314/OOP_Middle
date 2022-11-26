@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/api/scrap-data")
+@RequestMapping("/")
 public class ScrappingController {
 
     private final ScrappingService scrappingService;
