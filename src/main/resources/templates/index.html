@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link
+            href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
+            rel="stylesheet"  type='text/css'>
+    <script src="https://kit.fontawesome.com/3628ef7c13.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h2 style="font-size: 2rem; margin-bottom: 50px">App for scrapping company data</h2>
+            <form action="#" th:action="@{/api/scrap-data}" th:object="${requestDTO}" method="post">
+                <p><input placeholder="Company name: " class="name_input" type="text" th:field="*{name}" /></p>
+                <input class="submit-btn" type="submit" value="Scrap data" />
+            </form>
+        </div>
+        <div class="content">
+            <h1 class="red">Result</h1>
+            <p class="no_data" th:text="${responseDTO == null} ? 'Please submit the form!'"></p>
+            <td>
+            <ul th:if="${responseDTO != null}">
+                <li style="margin-bottom: 10px">
+                    <span><b>Company name: </b></span>
+                    <a style="margin: 10px 0 0" th:text=" ${responseDTO.name}"></a>
+                </li>
+                <li style="margin-bottom: 10px">
+                    <span><b>Company twitter page:</b></span>
+                    <a th:href="${!responseDTO.twitter.startsWith('http')} ? 'https://' + ${responseDTO.twitter} : ${responseDTO.twitter}" style="margin: 10px 0 0; text-decoration: none; color: rebeccapurple" th:text="${responseDTO.twitter}"></a>
+                </li>
+                <li style="margin-bottom: 10px">
+                    <span><b>Company facebook page:</b></span>
+                    <a th:href="${!responseDTO.facebook.startsWith('http')} ? 'https://' + ${responseDTO.facebook} : ${responseDTO.facebook}" style="margin: 10px 0 0; text-decoration: none; color: rebeccapurple" th:text="${responseDTO.facebook}"></a>
+                </li>
+                <li style="margin-bottom: 10px">
+                    <span><b>Company logo link: </b></span>
+                    <a th:href="${!responseDTO.logo.startsWith('http')} ? 'https://' + ${responseDTO.logo} : ${responseDTO.logo}" style="margin: 10px 0 0; text-decoration: none; color: rebeccapurple" th:text="${responseDTO.logo}"></a>
+                </li>
+                <li style="margin-bottom: 10px">
+                    <span><b>Company icon link:</b></span>
+                    <a th:href="${!responseDTO.icon.startsWith('http')} ? 'https://' + ${responseDTO.icon} : ${responseDTO.icon}" style="margin: 10px 0 0; text-decoration: none; color: rebeccapurple" th:text="${responseDTO.icon}"></a>
+                </li>
+                <li style="margin-bottom: 10px">
+                    <span><b>Company employees count:</b></span>
+                    <a style="margin: 10px 0 0;" th:text="${responseDTO.employees}"></a>
+                </li>
+                <li style="margin-bottom: 10px">
+                    <span><b>Company address:</b></span>
+                    <a style="margin: 10px 0 0;" th:text="${responseDTO.address}"></a>
+                </li>
+            </ul>
+            </td>
+        </div>
+    </div>
+</div>
+</body>
+</html>

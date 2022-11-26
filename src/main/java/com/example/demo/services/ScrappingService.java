@@ -2,10 +2,12 @@ package com.example.demo.services;
 
 import com.example.demo.dto.RequestDTO;
 import com.example.demo.dto.ResponseDTO;
+import com.example.demo.repositories.ResponseDTORepository;
 import com.example.demo.scrappers.AZUREDataScrapper;
 import com.example.demo.scrappers.PDLDataScrapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,21 +18,33 @@ public class ScrappingService {
 
     private final PDLDataScrapper pdlScrapper = PDLDataScrapper.getInstance();
     private final AZUREDataScrapper azureDataScrapper = AZUREDataScrapper.getInstance();
+    private final ResponseDTORepository repository;
     private String name;
 
+    @Autowired
+    public ScrappingService(ResponseDTORepository repository) {
+        this.repository = repository;
+    }
+
     public ResponseDTO scrapData(RequestDTO requestDTO) throws IOException {
-        JSONObject jsonObject = pdlScrapper.scrapData(requestDTO.name());
+        if (repository.findByDomain(requestDTO.getName()).isPresent()) {
+            return repository.findByDomain(requestDTO.getName()).get();
+        }
+
+        JSONObject jsonObject = pdlScrapper.scrapData(requestDTO.getName());
         name = parseField(jsonObject, "name");
 
-        return new ResponseDTO(
-                name,
-                parseField(jsonObject, "twitter_url"),
-                parseField(jsonObject, "facebook_url"),
-                parseField(jsonObject, "logo"),
-                parseField(jsonObject, "icon"),
-                Integer.parseInt(Objects.requireNonNull(parseField(jsonObject, "employee_count"))),
-                parseField(jsonObject, "location")
-        );
+        return repository.save(
+                new ResponseDTO(
+                        name,
+                        parseField(jsonObject, "twitter_url"),
+                        parseField(jsonObject, "facebook_url"),
+                        parseField(jsonObject, "logo"),
+                        parseField(jsonObject, "icon"),
+                        Integer.parseInt(Objects.requireNonNull(parseField(jsonObject, "employee_count"))),
+                        parseField(jsonObject, "location"),
+                        requestDTO.getName()
+                ));
     }
 
     private String parseField(JSONObject jsonObject, String field) throws IOException {
@@ -78,7 +92,7 @@ public class ScrappingService {
         return null;
     }
 
-    private static String formatString(String str, boolean closing) {
+    private String formatString(String str, boolean closing) {
         if (str == null) {
             return "";
         }
