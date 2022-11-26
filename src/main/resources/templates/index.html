@@ -13,7 +13,7 @@
     <div class="card">
         <div class="header">
             <h2 style="font-size: 2rem; margin-bottom: 50px">App for scrapping company data</h2>
-            <form action="#" th:action="@{/api/scrap-data}" th:object="${requestDTO}" method="post">
+            <form action="#" th:action="@{/}" th:object="${requestDTO}" method="post">
                 <p><input placeholder="Company name: " class="name_input" type="text" th:field="*{name}" /></p>
                 <input class="submit-btn" type="submit" value="Scrap data" />
             </form>
