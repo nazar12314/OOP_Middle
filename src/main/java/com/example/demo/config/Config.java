@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import org.springframework.stereotype.Component;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;

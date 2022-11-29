@@ -7,7 +7,7 @@ import com.example.demo.request.RequestType;
 import org.json.JSONObject;
 import java.io.IOException;
 
-public class PDLDataScrapper {
+public class PDLDataScrapper implements Scrappable {
 
     private static PDLDataScrapper scrapper;
     private final String endpoint = Config.get("PDL_LINK");
@@ -16,12 +16,18 @@ public class PDLDataScrapper {
     private PDLDataScrapper() {}
 
     public JSONObject scrapData(String query) throws IOException {
-        RequestObject getRequestObject = new RequestObject(endpoint, RequestType.GET);
-        getRequestObject.addHeader("x-api-key", Config.get("PDL_TOKEN"));
-        getRequestObject
-                .addQuery("website", query)
-                .save();
-        return requestSender.sendRequest(getRequestObject);
+        RequestObject requestObject = RequestObject
+                .builder()
+                .endpoint(endpoint)
+                .requestMethod(RequestType.GET)
+                .header("x-api-key", Config.get("PDL_TOKEN"))
+                .query("website", query)
+                .build();
+        requestObject.generateUrl();
+
+        System.out.println(requestObject.getHeaders());
+
+        return requestSender.sendRequest(requestObject);
     }
 
     public static PDLDataScrapper getInstance() {

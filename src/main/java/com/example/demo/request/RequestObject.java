@@ -1,31 +1,28 @@
 package com.example.demo.request;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Singular;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@Builder
 public class RequestObject {
     /**
-     * After adding queries to RequestObject, you should apply method save,
-     * otherwise those changes would not be added
+     * After using build in RequestObject, you should apply method generateUrl,
+     * otherwise those changes that you add before (queries, headers) would not be added
      */
     private URL url;
-    private final String endpoint;
-    private final RequestType requestMethod;
-    private final Map<String, String> queries = new HashMap<>();
-    private final Map<String, String> headers = new HashMap<>();
+    private String endpoint;
+    private RequestType requestMethod;
 
-    public RequestObject(String endpoint, RequestType requestMethod) throws IOException {
-        this.endpoint = endpoint;
-        this.requestMethod = requestMethod;
-        setUrl();
-    }
+    @Singular private final Map<String, String> queries;
+    @Singular private final Map<String, String> headers;
 
-    private void setUrl() throws IOException {
+    public void generateUrl() throws IOException {
         StringBuilder tempUrl = new StringBuilder(endpoint);
 
         for (Map.Entry<String, String> entry : queries.entrySet()) {
@@ -35,26 +32,7 @@ public class RequestObject {
         this.url = new URL(tempUrl.toString());
     }
 
-    public RequestObject addHeader(String key, String value) {
-        headers.put(key, value);
-        return this;
-    }
-
-    public RequestObject addQuery(String key, String value) {
-        queries.put(key, value);
-        return this;
-    }
-
-    public RequestObject addQueries(Map<String, String> queries) {
-        this.queries.putAll(queries);
-        return this;
-    }
-
     public String getRequestMethod() {
         return requestMethod.toString();
-    }
-
-    public void save() throws IOException {
-        setUrl();
     }
 }

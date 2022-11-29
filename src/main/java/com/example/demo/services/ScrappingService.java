@@ -35,16 +35,17 @@ public class ScrappingService {
         name = parseField(jsonObject, "name");
 
         return repository.save(
-                new ResponseDTO(
-                        name,
-                        parseField(jsonObject, "twitter_url"),
-                        parseField(jsonObject, "facebook_url"),
-                        parseField(jsonObject, "logo"),
-                        parseField(jsonObject, "icon"),
-                        Integer.parseInt(Objects.requireNonNull(parseField(jsonObject, "employee_count"))),
-                        parseField(jsonObject, "location"),
-                        requestDTO.getName()
-                ));
+                ResponseDTO
+                        .builder()
+                        .name(name)
+                        .twitter(parseField(jsonObject, "twitter_url"))
+                        .facebook(parseField(jsonObject, "facebook_url"))
+                        .logo(parseField(jsonObject, "logo"))
+                        .icon(parseField(jsonObject, "icon"))
+                        .domain(requestDTO.getName())
+                        .employees(Integer.parseInt(Objects.requireNonNull(parseField(jsonObject, "employee_count"))))
+                        .address(parseField(jsonObject, "location"))
+                        .build());
     }
 
     private String parseField(JSONObject jsonObject, String field) throws IOException {

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class AZUREDataScrapper {
+public class AZUREDataScrapper implements Scrappable {
 
     private static AZUREDataScrapper scrapper;
     private final String endpoint = Config.get("AZURE_SEARCH_LINK");
@@ -31,11 +31,15 @@ public class AZUREDataScrapper {
     private RequestObject formRequest(String endpoint, String query) throws IOException {
         String token = Config.get("AZURE_SEARCH_TOKEN");
 
-        RequestObject requestObject = new RequestObject(endpoint, RequestType.GET);
-        requestObject.addHeader("Ocp-Apim-Subscription-Key", token);
-        requestObject
-                .addQuery("q", URLEncoder.encode(query, StandardCharsets.UTF_8))
-                .save();
+        RequestObject requestObject = RequestObject
+                .builder()
+                .endpoint(endpoint)
+                .requestMethod(RequestType.GET)
+                .header("Ocp-Apim-Subscription-Key", token)
+                .query("q", URLEncoder.encode(query, StandardCharsets.UTF_8))
+                .build();
+
+        requestObject.generateUrl();
 
         return requestObject;
     }
