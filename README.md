@@ -1,6 +1,5 @@
 ## Use case diagram
-
-<img src="https://user-images.githubusercontent.com/93192972/205349537-f4940aa8-2703-4118-94a8-6b5974b7f0de.png" width="700">
+![image](https://user-images.githubusercontent.com/93192972/205350877-a94b1b9c-b0c0-44a5-b7b4-105068e5c3f4.png)
 
 ## Class Diagram
 
