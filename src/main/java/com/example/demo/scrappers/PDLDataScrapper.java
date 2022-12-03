@@ -25,8 +25,6 @@ public class PDLDataScrapper implements Scrappable {
                 .build();
         requestObject.generateUrl();
 
-        System.out.println(requestObject.getHeaders());
-
         return requestSender.sendRequest(requestObject);
     }
 

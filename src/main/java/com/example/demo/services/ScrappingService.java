@@ -45,7 +45,8 @@ public class ScrappingService {
                         .domain(requestDTO.getName())
                         .employees(Integer.parseInt(Objects.requireNonNull(parseField(jsonObject, "employee_count"))))
                         .address(parseField(jsonObject, "location"))
-                        .build());
+                        .build()
+        );
     }
 
     private String parseField(JSONObject jsonObject, String field) throws IOException {
