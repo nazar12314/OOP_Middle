@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.ErrorDTO;
 import com.example.demo.dto.RequestDTO;
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.services.ScrappingService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Controller
@@ -29,8 +31,12 @@ public class ScrappingController {
 
     @PostMapping
     public String scrapData(@ModelAttribute RequestDTO requestDTO, Model model) throws IOException {
-        ResponseDTO responseDTO = scrappingService.scrapData(requestDTO);
-        model.addAttribute("responseDTO", responseDTO);
+        try {
+            ResponseDTO responseDTO = scrappingService.scrapData(requestDTO);
+            model.addAttribute("responseDTO", responseDTO);
+        } catch (FileNotFoundException ex) {
+            model.addAttribute(new ErrorDTO("There is no such Company with this domain or it can't be accessed"));
+        }
         return "index";
     }
 }

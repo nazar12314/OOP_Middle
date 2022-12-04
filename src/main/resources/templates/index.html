@@ -20,7 +20,8 @@
         </div>
         <div class="content">
             <h1 class="red">Result</h1>
-            <p class="no_data" th:text="${responseDTO == null} ? 'Please submit the form!'"></p>
+            <p class="no_data" th:text="${responseDTO == null && errorDTO == null} ? 'Please submit the form!'"></p>
+            <p style="color: red" class="no_data" th:text="${errorDTO != null} ? ${errorDTO.message}"></p>
             <td>
             <ul th:if="${responseDTO != null}">
                 <li style="margin-bottom: 10px">
